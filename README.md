@@ -1,4 +1,4 @@
-# fly-ftp-server
+# fly-vsftpd
 
 A simple FTP server for [Fly.io](https://fly.io) (based on [fly-ftp-server](https://github.com/gregmsanderson/fly-ftp-server)) using `vsftpd`. README is slightly out of date, but follow the commands and it should work.
 
