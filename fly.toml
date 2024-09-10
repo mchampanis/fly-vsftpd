@@ -1,75 +1,84 @@
-app = "fly-ftp-server"
-
-kill_signal = "SIGINT"
-kill_timeout = 5
-
-[env]
-# fix zomble reaping:
-TINI_SUBREAPER = true
-# passive ports matching the first and last of those below, in [services]:
-MIN_PORT = 21000
-MAX_PORT = 21005
-# (optional) uncomment the next line and put your Fly app's IPv4, got from running fly info:
-#ADDRESS = '1.2.3.4'
+app            = 'mik3-files'
+primary_region = 'jnb'
+kill_signal    = 'SIGINT'
+kill_timeout   = '5s'
 
 [experimental]
-allowed_public_ports = []
-auto_rollback = true
+  auto_rollback = true
 
-# if you call your volume something else, update this part to match:
-[mounts]
-destination = "/data"
-source = "ftp_data"
+[build]
 
-[[services]]
-internal_port = 21
-protocol = "tcp"
+[env]
+  TINI_SUBREAPER = 'true'
 
-[[services.ports]]
-port = 21
+[[mounts]]
+  source      = 'files'
+  destination = '/data'
 
-[[services.tcp_checks]]
-interval = "5s"
-timeout = "2s"
-
-[[services]]
-internal_port = 21000
-protocol = "tcp"
-
-[[services.ports]]
-port = 21000
+[http_service]
+  internal_port        = 21
+  force_https          = true
+  auto_stop_machines   = true
+  auto_start_machines  = true
+  min_machines_running = 0
+  processes            = ['app']
 
 [[services]]
-internal_port = 21001
-protocol = "tcp"
-
-[[services.ports]]
-port = 21001
-
-[[services]]
-internal_port = 21002
-protocol = "tcp"
-
-[[services.ports]]
-port = 21002
+  protocol      = 'tcp'
+  internal_port = 21
+  [[services.ports]]
+    port = 21
 
 [[services]]
-internal_port = 21003
-protocol = "tcp"
-
-[[services.ports]]
-port = 21003
-
-[[services]]
-internal_port = 21004
-protocol = "tcp"
-
-[[services.ports]]
-port = 21004
+  protocol      = 'tcp'
+  internal_port = 21000
+  [[services.ports]]
+    port = 21000
 
 [[services]]
-internal_port = 21005
-protocol = "tcp"
+  protocol      = 'tcp'
+  internal_port = 21001
+  [[services.ports]]
+    port = 21001
 
-[[services.ports]]
-port = 21005
+[[services]]
+  protocol      = 'tcp'
+  internal_port = 21002
+  [[services.ports]]
+    port = 21002
+
+[[services]]
+  protocol      = 'tcp'
+  internal_port = 21003
+  [[services.ports]]
+    port = 21003
+
+[[services]]
+  protocol      = 'tcp'
+  internal_port = 21004
+  [[services.ports]]
+    port = 21004
+
+[[services]]
+  protocol      = 'tcp'
+  internal_port = 21005
+  [[services.ports]]
+    port = 21005
+
+[checks]
+  [checks.ftp]
+    grace_period = "30s"
+    interval     = "5s"
+    port         = 21
+    timeout      = "2s"
+    type         = "tcp"
+
+[services.concurrency]
+  type       = "connections"
+  hard_limit = 10
+  soft_limit = 5
+
+[[vm]]
+  memory   = '1gb'
+  cpu_kind = 'shared'
+  cpus     = 1

@@ -1,6 +1,6 @@
 # fly-ftp-server
 
-A simple FTP server for [Fly.io](https://fly.io) (based on [alpine-ftp-server](https://hub.docker.com/r/delfer/alpine-ftp-server)) using `vsftpd` _very secure FTP daemon_.
+A simple FTP server for [Fly.io](https://fly.io) (based on [fly-ftp-server](https://github.com/gregmsanderson/fly-ftp-server)) using `vsftpd`. README is slightly out of date, but follow the commands and it should work.
 
 ## Customise
 
@@ -10,22 +10,14 @@ Edit the `name` in the `fly.toml` to one of your choice:
 app = "fly-ftp-server"
 ```
 
-The `[env]` block in the `fly.toml` contains the port range for passive connections:
-
-```toml
-[env]
-MIN_PORT = 21000
-MAX_PORT = 21005
-```
-
-If you change them, that `MIN_PORT` and `MAX_PORT` must match up with the ports in the `fly.toml` file's `[services]` section. Unfortunately Fly [does](https://fly.io/docs/reference/configuration/) [not](https://community.fly.io/t/define-port-range-for-service/1938/2?u=greg) currently support providing a port range for TCP. So you need to provide them individually. Which makes providing a large number of ports harder, but possible.
-
-The `[env]` block also has an `ADDRESS` value. Run `fly info` to get _your_ app's IPv4:
-```toml
-ADDRESS = '1.2.3.4'
-```
-
 You may also want to adjust the FTP options. Take a look at the `conf/vsftpd.conf` file, adjusting that to your needs. We have generally used default values.
+
+## IP
+This needs a dedicated ipv4 address allocated to your app.
+
+```
+fly ips allocate-v4
+```
 
 ## Deploy
 
@@ -117,7 +109,7 @@ Try running `fly ssh console` to connect to a vm. Once there you can check `vsft
 ```
 ps -a | grep vsftpd
 528 root      0:00 pidproxy /var/run/vsftpd/vsftpd.pid true
-550 root      0:00 vsftpd -opasv_min_port=21000 -opasv_max_port=21005 /etc/vsftpd/vsftpd.conf
+550 root      0:00 vsftpd /etc/vsftpd/vsftpd.conf
 722 root      0:00 grep vsftpd
 ```
 
