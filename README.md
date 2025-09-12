@@ -1,19 +1,19 @@
 # fly-vsftpd
 
-A simple FTP server for [Fly.io](https://fly.io) (based on [fly-ftp-server](https://github.com/gregmsanderson/fly-ftp-server)) using `vsftpd`. README is slightly out of date, but follow the commands and it should work.
+A simple FTP server for [Fly.io](https://fly.io) (based on [fly-ftp-server](https://github.com/gregmsanderson/fly-ftp-server)) using `vsftpd`. `README` is slightly out of date, but follow the below commands and it should work.
 
 ## Customise
 
-Edit the `name` in the `fly.toml` to one of your choice:
+Change `name` in `fly.toml` to your choice:
 
 ```toml
 app = "fly-vsftpd"
 ```
 
-You may also want to adjust the FTP options. Take a look at the `conf/vsftpd.conf` file, adjusting that to your needs. We have generally used default values.
+You may want to adjust the FTP options. Take a look at the `conf/vsftpd.conf` file, adjusting that to your needs. We have generally used default values.
 
 ## IP
-This needs a dedicated ipv4 address allocated to your app.
+This needs a dedicated IPv4 address allocated to your app.
 
 ```
 fly ips allocate-v4
@@ -21,7 +21,7 @@ fly ips allocate-v4
 
 ## Deploy
 
-**Note:** Answer _NO_ at the end, since you need to do a couple of things before you can deploy:
+**Note:** Answer `NO` at the end, since you need to do a couple of extra things before you can deploy:
 
 ```
 $ fly launch
@@ -40,10 +40,9 @@ Wrote config file fly.toml
 Your app is ready. Deploy with `flyctl deploy`
 ```
 
-Why not deploy right now?
+### Why not deploy right now?
 
 1. You need to create a volume to store the uploaded files.
-
 2. You need to specify the `USERS` that are permitted to connect to the server.
 
 So let's do that:
